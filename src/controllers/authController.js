@@ -15,7 +15,7 @@ dotenv.config();
 const { JWT_SECRET } = process.env;
 
 // CONTROLLER
-class UserController {
+class AuthController {
     // SIGNUP
     static async signup(req, res) {
         try {
@@ -35,15 +35,23 @@ class UserController {
             }
 
             // CHECK IF EMAIL ALREADY EXISTS
-            const userExists = await user.findOne({
-                where: {
-                    [Op.or]: [{ email }, { phone }],
-                },
+            const emailExists = await user.findOne({
+                where: { email },
             });
 
             // RETURN ERROR IF USER EXISTS
-            if (userExists) {
-                return res.status(409).json({ message: 'User already exists' });
+            if (emailExists) {
+                return res.status(409).json({ message: 'Email already exists' });
+            }
+
+            // CHECK IF PHONE NUMBER ALREADY EXISTS
+            const phoneExists = await user.findOne({
+                where: { phone },
+            });
+
+            // RETURN ERROR IF PHONE NUMBER EXISTS
+            if (phoneExists) {
+                return res.status(409).json({ message: 'Phone number already exists' });
             }
 
             // HASH PASSWORD
@@ -125,4 +133,4 @@ class UserController {
     }
 }
 
-export default UserController;
+export default AuthController;
