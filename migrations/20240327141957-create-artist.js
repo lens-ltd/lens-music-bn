@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('artists', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -14,28 +14,25 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          isEmail: true
+      label_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'labels',
+          key: 'id'
         }
       },
-      phone: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        unique: true
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      role: {
-        type: Sequelize.ENUM,
-        values: ['admin', 'user'],
+      user_id: {
+        type: Sequelize.UUID,
         allowNull: false,
-        defaultValue: 'user'
+        references: {
+          model: 'users',
+          key: 'id'
+        }
+      },
+      avatar: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -48,6 +45,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('artists');
   }
 };

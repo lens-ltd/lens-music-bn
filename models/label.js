@@ -3,31 +3,31 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
+  class label extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // LABEL
-      user.hasMany(models.label, {
+      // USER
+      label.belongsTo(models.user, {
         foreignKey: 'user_id',
-        as: 'labels',
+        as: 'user',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
 
       // ARTIST
-      user.hasMany(models.artist, {
-        foreignKey: 'user_id',
+      label.hasMany(models.artist, {
+        foreignKey: 'label_id',
         as: 'artists',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
     }
   }
-  user.init({
+  label.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -39,32 +39,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true
-      }
-    },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true
-    },
-    password: {
-      type: DataTypes.STRING,
+    incorporation_date: {
+      type: DataTypes.DATE,
       allowNull: false
     },
-    role: {
-      type: DataTypes.ENUM,
-      values: ['admin', 'user'],
+    country: {
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user'
-    }
+      defaultValue: 'rw'
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'user',
+        key: 'id'
+      }
+    },
   }, {
     sequelize,
-    modelName: 'user',
+    modelName: 'label',
   });
-  return user;
+  return label;
 };

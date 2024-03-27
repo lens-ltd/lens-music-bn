@@ -1,11 +1,19 @@
 import { Router } from "express";
-import userRoutes from "./userRoutes";
+import authRoutes from "./authRoutes";
+import labelRoutes from "./labelRoutes";
+import artistRoutes from "./artistRoutes";
 
 // ROUTER
 const router = Router();
 
 // USER ROUTES
-router.use("/users", userRoutes);
+router.use("/auth", authRoutes);
+
+// LABEL ROUTES
+router.use("/labels", labelRoutes);
+
+// ARTIST ROUTES
+router.use("/artists", artistRoutes);
 
 // EXPORT ROUTER
 export default router;
