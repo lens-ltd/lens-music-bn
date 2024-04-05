@@ -5,8 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "test": "npm run test",
+    "babel": "npx babel src/ -d build --presets @babel/preset-modules",
     "migrate": "npx sequelize-cli db:migrate",
-    "dev": "npm run migrate && nodemon --exec babel-node src/server.js"
+    "dev": "npm run migrate && nodemon --exec babel-node src/server.js",
+    "start": "npm run babel && node build/server.js"
   },
   "repository": {
     "type": "git",

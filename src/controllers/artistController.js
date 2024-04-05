@@ -1,4 +1,5 @@
 import db from '../../models'
+import { getPagination, getPagingData } from '../utils/pagination';
 import { uploadBlob } from '../utils/uploads';
 
 // LOAD MODELS
@@ -56,6 +57,9 @@ class ArtistController {
         try {
 
             const { id, role } = req.user;
+            const { page, size } = req.query;
+
+            const { limit, offset } = getPagination(page, size);
 
             let condition = {};
 
@@ -64,8 +68,10 @@ class ArtistController {
             }
 
             // LIST ARTISTS
-            const artists = await artist.findAll({
+            const artists = await artist.findAndCountAll({
                 where: condition,
+                limit,
+                offset,
                 include: [
                     {
                         model: label,
@@ -81,7 +87,7 @@ class ArtistController {
             });
 
             // RETURN RESPONSE
-            return res.status(200).json({ data: artists });
+            return res.status(200).json({ data: getPagingData(artists, page, limit)});
         } catch (error) {
             return res.status(500).json({ message: error?.message });
         }

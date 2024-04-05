@@ -1,5 +1,6 @@
 import moment from 'moment';
 import db from '../../models'
+import { getPagination, getPagingData } from '../utils/pagination';
 
 // LOAD MODELS
 const { label, user } = db;
@@ -30,6 +31,9 @@ class LabelController {
     static async listLabels(req, res) {
         try {
             const { id, role } = req.user;
+            const { page, size } = req.query;
+
+            const { limit, offset } = getPagination(page, size);
 
             let condition = {};
 
@@ -37,8 +41,10 @@ class LabelController {
                 condition.user_id = id;
             }
             // LIST LABELS
-            const labels = await label.findAll({
+            const labels = await label.findAndCountAll({
                 where: condition,
+                limit,
+                offset,
                 include: [
                     {
                         model: user,
@@ -48,7 +54,7 @@ class LabelController {
                 ]
             });
 
-            return res.status(200).json({ message: 'Labels listed successfully', data: labels });
+            return res.status(200).json({ message: 'Labels listed successfully', data: getPagingData(labels, page, limit) });
         } catch (error) {
             return res.status(500).json({ message: error?.message });
         }
