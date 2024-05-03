@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import { AppDataSource } from './data-source';
+import routes from './routes';
 
 // LOAD ENVIRONMENT VARIABLES
 const { PORT = 8080 } = process.env;
@@ -13,6 +14,9 @@ const app: Application = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
+// ROUTES
+app.use('/api', routes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
