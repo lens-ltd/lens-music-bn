@@ -3,11 +3,11 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../entities/user.entity';
 import { AuthenticatedRequest } from '../types/auth.type';
 
-export interface AuthenticationRequest extends Request {
+interface AuthenticationRequest extends Request {
   user: User | JwtPayload | undefined;
 }
 
-export const authenticatedMiddleware = (
+export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction

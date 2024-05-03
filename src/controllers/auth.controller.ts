@@ -1,9 +1,11 @@
 import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthService } from '../services/auth.service';
+import { validateEmail } from '../helpers/validations.helper';
 import { UserService } from '../services/user.service';
-import { validateEmail } from '../utils/validations';
 
 // INITIALIZE USER SERVICE
+const authService = new AuthService();
 const userService = new UserService();
 
 // LOAD ENVIROMENT VARIABLES
@@ -39,7 +41,7 @@ export const AuthController = {
       }
 
       // CREATE USER
-      const newUser = await userService.signup({
+      const newUser = await authService.signup({
         email,
         name,
         phone,
@@ -85,7 +87,7 @@ export const AuthController = {
       }
 
       // LOGIN
-      const user = await userService.login({ email, password });
+      const user = await authService.login({ email, password });
 
       // IF USER DOES NOT EXIST
       if (!user) {
