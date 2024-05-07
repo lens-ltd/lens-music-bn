@@ -58,6 +58,7 @@ export class Label {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     name: 'updated_at',
+    onUpdate: 'CURRENT_TIMESTAMP'
   })
   updatedAt: Date;
 

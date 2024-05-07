@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { ROLES } from '../constants/auth.constant';
 import { Label } from './label.entity';
+import { Artist } from './artist.entity';
 
 @Entity()
 @Unique(['email', 'id'])
@@ -73,9 +74,14 @@ export class User {
     name: 'updated_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt!: Date;
 
   @OneToMany(() => Label, (label) => label.user)
   labels: Label[];
+
+  // ARTISTS
+  @OneToMany(() => Artist, (artist) => artist.user)
+  artists: Artist[];
 }
