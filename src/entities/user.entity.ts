@@ -11,6 +11,7 @@ import {
 import { ROLES } from '../constants/auth.constant';
 import { Label } from './label.entity';
 import { Artist } from './artist.entity';
+import { Release } from './release.entity';
 
 @Entity()
 @Unique(['email', 'id'])
@@ -84,4 +85,8 @@ export class User {
   // ARTISTS
   @OneToMany(() => Artist, (artist) => artist.user)
   artists: Artist[];
+
+  // RELEASES
+  @OneToMany(() => Release, (release) => release.user)
+  releases: Release[];
 }

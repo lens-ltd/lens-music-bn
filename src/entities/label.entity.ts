@@ -5,11 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { User } from './user.entity';
 import { countries } from '../constants/data.constant';
+import { Release } from './release.entity';
 
 @Entity()
 @Unique(['id'])
@@ -66,4 +68,8 @@ export class Label {
   @ManyToOne(() => User, (user) => user.labels)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  // RELEASES
+  @OneToMany(() => Release, (release) => release.label)
+  releases: Release[];
 }

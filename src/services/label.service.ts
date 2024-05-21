@@ -2,7 +2,6 @@ import { DeleteResult, Repository } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Label } from '../entities/label.entity';
 import { getPagingData } from '../helpers/pagination.helper';
-import { User } from '../entities/user.entity';
 import { UserService } from './user.service';
 
 export class LabelService {

@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { STATUSES } from '../constants/artist.constants';
 import { User } from './user.entity';
+import { ReleaseArtist } from './release_artist.entity';
 
 @Entity()
 export class Artist {
@@ -55,4 +57,8 @@ export class Artist {
   @ManyToOne(() => User, (user) => user.artists)
   @JoinColumn({ name: 'user_id' })
   user!: User;
+
+  // RELEASE ARTISTS
+  @OneToMany(() => ReleaseArtist, (releaseArtist) => releaseArtist.artist)
+  releases: ReleaseArtist[];
 }
