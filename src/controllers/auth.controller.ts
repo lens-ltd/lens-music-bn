@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthService } from '../services/auth.service';
 import { validateEmail } from '../helpers/validations.helper';
@@ -77,22 +77,12 @@ export const AuthController = {
   },
 
   // LOGIN
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
 
-      // CHECK IF REQUIRED FIELDS ARE PROVIDED
-      if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required' });
-      }
-
       // LOGIN
       const user = await authService.login({ email, password });
-
-      // IF USER DOES NOT EXIST
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
 
       // CREATE TOKEN
       const token = jwt.sign(
@@ -114,10 +104,8 @@ export const AuthController = {
           token,
         },
       });
-    } catch (error: any) {
-      return res.status(500).json({
-        message: error.message,
-      });
+    } catch (error) {
+      next(error);
     }
   },
 };

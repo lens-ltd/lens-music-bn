@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import { AppDataSource } from './data-source';
 import routes from './routes';
+import errorHandler from './middlewares/errors.middleware';
 
 // LOAD ENVIRONMENT VARIABLES
 const { PORT = 8080 } = process.env;
@@ -17,6 +18,7 @@ app.use(cors());
 
 // ROUTES
 app.use('/api', routes);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
