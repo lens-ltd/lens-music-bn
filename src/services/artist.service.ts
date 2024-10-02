@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Artist } from '../entities/artist.entity';
 import { getPagingData } from '../helpers/pagination.helper';
-import { UUID } from 'crypto';
+import { UUID } from '../types/common.types';
 
 export class ArtistService {
   private artistRepository: Repository<Artist>;
@@ -68,7 +68,7 @@ export class ArtistService {
   }
 
   // GET ARTIST BY ID
-  async getArtistById(id: string): Promise<Artist | null> {
+  async getArtistById(id: UUID): Promise<Artist | null> {
     try {
       if (!id) {
         throw new Error('Artist ID is required');

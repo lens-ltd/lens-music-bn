@@ -82,7 +82,7 @@ export const ArtistController = {
       const { user } = req as AuthenticatedRequest;
 
       // FETCH ARTIST BY ID
-      const artist = await artistService.getArtistById(id);
+      const artist = await artistService.getArtistById(id as UUID);
 
       // IF USER IS NOT ADMIN AND ARTIST IS NOT ACTIVE
       if (user?.role !== ROLES.ADMIN && artist?.status !== STATUSES.ACTIVE) {
@@ -112,7 +112,7 @@ export const ArtistController = {
       }
 
       // FETCH ARTIST BY ID
-      const artist = await artistService.getArtistById(id);
+      const artist = await artistService.getArtistById(id as UUID);
 
       // IF ARTIST DOES NOT EXIST
       if (!artist) {

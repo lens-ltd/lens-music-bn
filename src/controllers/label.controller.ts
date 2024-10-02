@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { LabelService } from '../services/label.service';
 import { AuthenticatedRequest } from '../types/auth.type';
 import { validateCountry, validateEmail } from '../helpers/validations.helper';
+import { UUID } from '../types/common.types';
 
 // INITIALIZE LABEL SERVICE
 const labelService = new LabelService();
@@ -42,7 +43,7 @@ export const LabelController = {
         name,
         description,
         email,
-        userId: user.id,
+        userId: user.id as UUID,
         country,
       });
 
@@ -87,7 +88,7 @@ export const LabelController = {
       }
 
       // CHECK IF LABEL EXISTS
-      const labelExists = await labelService.getLabelById(id);
+      const labelExists = await labelService.getLabelById(id as UUID);
 
       // IF LABEL NOT FOUND
       if (!labelExists) {
@@ -96,7 +97,7 @@ export const LabelController = {
 
       // UPDATE LABEL
       const updatedLabel = await labelService.updateLabel({
-        id,
+        id: id as UUID,
         name,
         description,
         email,
@@ -126,7 +127,7 @@ export const LabelController = {
       }
 
       // CHECK IF LABEL EXISTS
-      const labelExists = await labelService.getLabelById(id);
+      const labelExists = await labelService.getLabelById(id as UUID);
 
       // IF LABEL NOT FOUND
       if (!labelExists) {
@@ -154,7 +155,7 @@ export const LabelController = {
       const labels = await labelService.fetchLabels({
         take: Number(take),
         skip: Number(skip),
-        condition: {...req.query, take: undefined, skip: undefined},
+        condition: { ...req.query, take: undefined, skip: undefined },
       });
 
       // RETURN RESPONSE
@@ -170,32 +171,32 @@ export const LabelController = {
   },
 
   // GET LABEL
-    async getLabel(req: Request, res: Response) {
-        try {
-        const { id } = req.params;
-    
-        // CHECK IF ID IS PROVIDED
-        if (!id) {
-            return res.status(400).json({ message: 'Label ID is required' });
-        }
-    
-        // GET LABEL
-        const label = await labelService.getLabelById(id);
-    
-        // IF LABEL NOT FOUND
-        if (!label) {
-            return res.status(404).json({ message: 'Label not found' });
-        }
-    
-        // RETURN RESPONSE
-        return res.status(200).json({
-            message: 'Label found successfully',
-            data: label,
-        });
-        } catch (error: any) {
-        return res.status(500).json({
-            message: error.message,
-        });
-        }
-    },
+  async getLabel(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      // CHECK IF ID IS PROVIDED
+      if (!id) {
+        return res.status(400).json({ message: 'Label ID is required' });
+      }
+
+      // GET LABEL
+      const label = await labelService.getLabelById(id as UUID);
+
+      // IF LABEL NOT FOUND
+      if (!label) {
+        return res.status(404).json({ message: 'Label not found' });
+      }
+
+      // RETURN RESPONSE
+      return res.status(200).json({
+        message: 'Label found successfully',
+        data: label,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
 };

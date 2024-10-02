@@ -3,6 +3,7 @@ import { AppDataSource } from '../data-source';
 import { Label } from '../entities/label.entity';
 import { getPagingData } from '../helpers/pagination.helper';
 import { UserService } from './user.service';
+import { UUID } from '../types/common.types';
 
 export class LabelService {
   private labelRepository: Repository<Label>;
@@ -23,7 +24,7 @@ export class LabelService {
     name: string;
     email: string;
     description: string;
-    userId: string;
+    userId: UUID;
     country: string;
   }): Promise<Label> {
     try {
@@ -86,7 +87,7 @@ export class LabelService {
   }
 
   // GET LABEL BY ID
-  async getLabelById(id: string): Promise<Label | null> {
+  async getLabelById(id: UUID): Promise<Label | null> {
     try {
       // IF ID IS NOT PROVIDED
       if (!id) {
@@ -118,7 +119,7 @@ export class LabelService {
     description,
     country,
   }: {
-    id: string;
+    id: UUID;
     name: string;
     email: string;
     description: string;
@@ -146,7 +147,7 @@ export class LabelService {
 
       return this.labelRepository.save(labelExists);
     } catch (error: any) {
-      throw error
+      throw error;
     }
   }
 

@@ -1,25 +1,14 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { ROLES } from '../constants/auth.constant';
 import { Label } from './label.entity';
 import { Artist } from './artist.entity';
 import { Release } from './release.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity()
-@Unique(['email', 'id'])
-export class User {
-  // ID
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+@Unique(['email', 'phone'])
+export class User extends AbstractEntity {
   // EMAIL
   @Column({
     name: 'email',
@@ -61,23 +50,6 @@ export class User {
     enum: Object.values(ROLES),
   })
   role!: string;
-
-  // CREATED AT
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt!: Date;
-
-  // UPDATED AT
-  @CreateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updatedAt!: Date;
 
   @OneToMany(() => Label, (label) => label.user)
   labels: Label[];

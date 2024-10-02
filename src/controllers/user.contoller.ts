@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
+import { UUID } from '../types/common.types';
 
 // INITIALIZE USER SERVICE
 const userService = new UserService();
@@ -16,7 +17,7 @@ export const UserController = {
       }
 
       // DELETE USER
-      const deletedUser = await userService.deleteUser(id);
+      const deletedUser = await userService.deleteUser(id as UUID);
 
       // IF USER DOES NOT EXIST
       if (!deletedUser) {
