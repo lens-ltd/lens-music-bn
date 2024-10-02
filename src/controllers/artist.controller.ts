@@ -40,7 +40,7 @@ export const ArtistController = {
   // FETCH ARTISTS
   async fetchArtists(req: Request, res: Response) {
     try {
-      const { take = 10, skip = 0, labelId } = req.query;
+      const { size = 10, page = 0, labelId } = req.query;
       const { user } = req as AuthenticatedRequest;
       let condition: object = {};
 
@@ -61,8 +61,8 @@ export const ArtistController = {
       // FETCH ARTISTS
       const artists = await artistService.fetchArtists({
         condition: condition,
-        take: take ? Number(take as string) : undefined,
-        skip: Number(skip) <= 0 ? Number(skip as string) : undefined,
+        size: Number(size),
+        page: Number(page),
       });
 
       // RETURN RESPONSE

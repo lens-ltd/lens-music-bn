@@ -149,13 +149,13 @@ export const LabelController = {
   // LIST LABELS
   async fetchLabels(req: Request, res: Response) {
     try {
-      const { take = 10, skip = 0 } = req.query;
+      const { size = 10, page = 0 } = req.query;
 
       // LIST LABELS
       const labels = await labelService.fetchLabels({
-        take: Number(take),
-        skip: Number(skip),
-        condition: { ...req.query, take: undefined, skip: undefined },
+        size: Number(size),
+        page: Number(page),
+        condition: { ...req.query, size: undefined, page: undefined },
       });
 
       // RETURN RESPONSE
