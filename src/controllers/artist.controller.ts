@@ -40,7 +40,7 @@ export const ArtistController = {
   // FETCH ARTISTS
   async fetchArtists(req: Request, res: Response) {
     try {
-      const { take = 10, skip = 0, labelId } = req.query;
+      const { size = 10, page = 0, labelId } = req.query;
       const { user } = req as AuthenticatedRequest;
       let condition: object = {};
 
@@ -61,8 +61,8 @@ export const ArtistController = {
       // FETCH ARTISTS
       const artists = await artistService.fetchArtists({
         condition: condition,
-        take: take ? Number(take as string) : undefined,
-        skip: Number(skip) <= 0 ? Number(skip as string) : undefined,
+        size: Number(size),
+        page: Number(page),
       });
 
       // RETURN RESPONSE
@@ -82,7 +82,7 @@ export const ArtistController = {
       const { user } = req as AuthenticatedRequest;
 
       // FETCH ARTIST BY ID
-      const artist = await artistService.getArtistById(id);
+      const artist = await artistService.getArtistById(id as UUID);
 
       // IF USER IS NOT ADMIN AND ARTIST IS NOT ACTIVE
       if (user?.role !== ROLES.ADMIN && artist?.status !== STATUSES.ACTIVE) {
@@ -112,7 +112,7 @@ export const ArtistController = {
       }
 
       // FETCH ARTIST BY ID
-      const artist = await artistService.getArtistById(id);
+      const artist = await artistService.getArtistById(id as UUID);
 
       // IF ARTIST DOES NOT EXIST
       if (!artist) {

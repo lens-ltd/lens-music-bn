@@ -1,8 +1,9 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Release } from "../entities/release.entity";
-import { getPagingData } from "../helpers/pagination.helper";
+import { getPagination, getPagingData } from "../helpers/pagination.helper";
 import { UUID } from "crypto";
+import { ReleasePagination } from "../types/models/release.types";
 
 export class ReleaseService {
     private releaseRepository: Repository<Release>;
@@ -67,19 +68,17 @@ export class ReleaseService {
 
     // FETCH RELEASES
     async fetchReleases({
-        take,
-        skip,
+        size,
+        page,
         condition,
     }: {
-        take: number;
-        skip: number;
+        size: number;
+        page: number;
         condition: object;
-    }): Promise<{
-        rows: Release[];
-        totalCount: number;
-        totalPages: number;
-        currentPage: number;
-    }> {
+    }): Promise<ReleasePagination> {
+
+        const { take, skip } = getPagination({ page, size });
+
         try {
           const releases = await this.releaseRepository.findAndCount({
             take,
@@ -91,7 +90,7 @@ export class ReleaseService {
             where: condition,
           });
 
-          return getPagingData(releases, take, skip);
+          return getPagingData({ data: releases, take, skip });
         } catch (error: any) {
           throw error;
         }

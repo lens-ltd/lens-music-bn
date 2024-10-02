@@ -1,8 +1,10 @@
 import { DeleteResult, Repository } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Label } from '../entities/label.entity';
-import { getPagingData } from '../helpers/pagination.helper';
+import { getPagination, getPagingData } from '../helpers/pagination.helper';
 import { UserService } from './user.service';
+import { UUID } from '../types/common.types';
+import { LabelPagination } from '../types/models/label.types';
 
 export class LabelService {
   private labelRepository: Repository<Label>;
@@ -23,7 +25,7 @@ export class LabelService {
     name: string;
     email: string;
     description: string;
-    userId: string;
+    userId: UUID;
     country: string;
   }): Promise<Label> {
     try {
@@ -60,18 +62,15 @@ export class LabelService {
   // FETCH LABELS
   async fetchLabels({
     condition,
-    take,
-    skip,
+    size,
+    page,
   }: {
     condition?: object;
-    take: number;
-    skip: number;
-  }): Promise<{
-    rows: Label[];
-    totalCount: number;
-    totalPages: number;
-    currentPage: number;
-  }> {
+    size: number;
+    page: number;
+  }): Promise<LabelPagination> {
+    const { take, skip } = getPagination({ size, page });
+
     try {
       const labels = await this.labelRepository.findAndCount({
         where: condition,
@@ -79,14 +78,14 @@ export class LabelService {
         take,
         skip,
       });
-      return getPagingData(labels, take, skip);
+      return getPagingData({ data: labels, take, skip });
     } catch (error: any) {
       throw error;
     }
   }
 
   // GET LABEL BY ID
-  async getLabelById(id: string): Promise<Label | null> {
+  async getLabelById(id: UUID): Promise<Label | null> {
     try {
       // IF ID IS NOT PROVIDED
       if (!id) {
@@ -118,7 +117,7 @@ export class LabelService {
     description,
     country,
   }: {
-    id: string;
+    id: UUID;
     name: string;
     email: string;
     description: string;
@@ -146,7 +145,7 @@ export class LabelService {
 
       return this.labelRepository.save(labelExists);
     } catch (error: any) {
-      throw error
+      throw error;
     }
   }
 

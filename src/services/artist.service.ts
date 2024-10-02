@@ -1,8 +1,9 @@
 import { Repository } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Artist } from '../entities/artist.entity';
-import { getPagingData } from '../helpers/pagination.helper';
-import { UUID } from 'crypto';
+import { getPagination, getPagingData } from '../helpers/pagination.helper';
+import { UUID } from '../types/common.types';
+import { ArtistPagination } from '../types/models/artist.types';
 
 export class ArtistService {
   private artistRepository: Repository<Artist>;
@@ -41,18 +42,15 @@ export class ArtistService {
   // FETCH ALL ARTISTS
   async fetchArtists({
     condition,
-    take,
-    skip,
+    size,
+    page,
   }: {
     condition?: object;
-    take?: number;
-    skip?: number;
-  }): Promise<{
-    rows: Artist[];
-    totalCount: number;
-    totalPages: number;
-    currentPage: number;
-  }> {
+    size?: number;
+    page?: number;
+  }): Promise<ArtistPagination> {
+    const { take, skip } = getPagination({ size, page });
+
     try {
       const artists = await this.artistRepository.findAndCount({
         where: condition,
@@ -61,14 +59,14 @@ export class ArtistService {
         relations: ['user'],
       });
 
-      return getPagingData(artists, take, skip);
+      return getPagingData({ data: artists, take, skip });
     } catch (error: any) {
       throw error;
     }
   }
 
   // GET ARTIST BY ID
-  async getArtistById(id: string): Promise<Artist | null> {
+  async getArtistById(id: UUID): Promise<Artist | null> {
     try {
       if (!id) {
         throw new Error('Artist ID is required');

@@ -78,8 +78,8 @@ export const ReleaseController = {
       const { user } = req as AuthenticatedRequest;
 
       const {
-        take = 10,
-        skip = 0,
+        size = 10,
+        page = 0,
         labelId = undefined,
         userId = undefined,
       } = req.query;
@@ -93,8 +93,8 @@ export const ReleaseController = {
       try {
         // FETCH RELEASES
         const releases = await releaseService.fetchReleases({
-          take: Number(take),
-          skip: Number(skip),
+          size: Number(size),
+          page: Number(page),
           condition,
         });
         return res.status(200).json({

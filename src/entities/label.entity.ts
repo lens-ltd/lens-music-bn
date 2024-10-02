@@ -1,25 +1,20 @@
 import { IsEmpty } from 'class-validator';
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { User } from './user.entity';
 import { countries } from '../constants/data.constant';
 import { Release } from './release.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity()
 @Unique(['id'])
-export class Label {
-  // ID
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Label extends AbstractEntity {
   // NAME
   @Column({ name: 'name', length: 255, type: 'varchar', nullable: false })
   @IsEmpty({ message: 'Name is required' })
@@ -46,23 +41,6 @@ export class Label {
     default: 'RW',
   })
   country: string;
-
-  // CREATED AT
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  // UPDATED AT
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    name: 'updated_at',
-    onUpdate: 'CURRENT_TIMESTAMP'
-  })
-  updatedAt: Date;
 
   // USER
   @ManyToOne(() => User, (user) => user.labels)

@@ -1,17 +1,15 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
   Unique,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Label } from './label.entity';
 import { User } from './user.entity';
-import { ReleaseArtist } from './release_artist.entity';
+import { ReleaseArtist } from './releaseArtist.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity()
 @Unique([
@@ -22,10 +20,7 @@ import { ReleaseArtist } from './release_artist.entity';
   'labelId',
   'version',
 ])
-export class Release {
-  // ID
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+export class Release extends AbstractEntity {
 
   // TITLE
   @Column({ name: 'title', nullable: false })
@@ -63,29 +58,19 @@ export class Release {
   @Column({ name: 'user_id', nullable: false })
   userId: string;
 
-  // CREATED AT
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt!: Date;
-
-  // UPDATED AT
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt!: Date;
-
   // LABEL
-  @ManyToOne(() => Label, (label) => label.releases)
+  @ManyToOne(() => Label, (label) => label.releases, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'label_id' })
   label: Label;
 
   // USER
-  @ManyToOne(() => User, (user) => user.releases)
+  @ManyToOne(() => User, (user) => user.releases, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

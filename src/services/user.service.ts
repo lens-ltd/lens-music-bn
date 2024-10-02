@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { User } from '../entities/user.entity';
-import { comparePasswords, hashPassword } from '../helpers/encryptions.helper';
+import { UUID } from '../types/common.types';
 
 export class UserService {
   private userRepository: Repository<User>;
@@ -34,7 +34,7 @@ export class UserService {
   }
 
   // DELETE USER
-  async deleteUser(id: string) {
+  async deleteUser(id: UUID) {
     try {
       if (!id) {
         throw new Error('User ID is required');
@@ -53,7 +53,7 @@ export class UserService {
   }
 
   // GET USER BY ID
-  async findUserById(id: string): Promise<User | null> {
+  async findUserById(id: UUID): Promise<User | null> {
     try {
       if (!id) {
         throw new Error('User ID is required');

@@ -1,19 +1,14 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Release } from './release.entity';
 import { Artist } from './artist.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity()
-export class ReleaseArtist {
-  // ID
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+export class ReleaseArtist extends AbstractEntity {
 
   // RELEASE ID
   @Column({ name: 'release_id', nullable: false })
@@ -22,24 +17,6 @@ export class ReleaseArtist {
   // ARTIST ID
   @Column({ name: 'artist_id', nullable: false })
   artistId!: string;
-
-  // CREATED AT
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt!: string;
-
-  // UPDATED AT
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt!: string;
 
   // RELEASES
   @ManyToOne(() => Release, (release) => release.artists)
