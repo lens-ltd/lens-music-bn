@@ -1,31 +1,27 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import 'dotenv/config';
-import { AppDataSource } from './data-source';
-import routes from './routes';
-import errorHandler from './middlewares/errors.middleware';
+import cluster from 'cluster';
+import os from 'os';
 
-// LOAD ENVIRONMENT VARIABLES
-const { PORT = 8080 } = process.env;
+const numCPUs = os.cpus().length;
 
-// CREATE EXPRESS APP
-const app: Application = express();
+if (cluster.isPrimary) {
+  console.log(`Master ${process.pid} is running`);
 
-// MIDDLEWARES
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-
-// ROUTES
-app.use('/api', routes);
-app.use(errorHandler);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  try {
-    AppDataSource.initialize();
-    console.log('Database connected');
-  } catch (error) {
-    console.error('Database connection failed', error);
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
   }
-});
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died`);
+    cluster.fork();
+  });
+} else {
+  import('./app').then(({ default: app }) => {
+    const { PORT = 8080, DB_NAME } = process.env;
+    app.listen(PORT, () => {
+      console.log(
+        `Worker ${process.pid} started on port ${PORT} and connected to ${DB_NAME}`
+      );
+    });
+  });
+}
