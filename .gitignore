@@ -8,3 +8,4 @@ temp/
 .yarnrc.yml
 yarn.lock
 .yarn/
+dist/
