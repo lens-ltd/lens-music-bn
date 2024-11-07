@@ -7,9 +7,10 @@ export const AppDataSource = new DataSource({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT as number | undefined,
   username: process.env.DB_USER,
-  password: process.env.DB_PASS,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: true,
   entities: [`${__dirname}/**/entities/*.{ts,js}`],
   migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
+  ssl: process.env.DB_HOST === 'localhost' ? false : { rejectUnauthorized: false },
 });

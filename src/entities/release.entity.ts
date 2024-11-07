@@ -21,7 +21,6 @@ import { AbstractEntity } from './abstract.entity';
   'version',
 ])
 export class Release extends AbstractEntity {
-
   // TITLE
   @Column({ name: 'title', nullable: false })
   title!: string;
