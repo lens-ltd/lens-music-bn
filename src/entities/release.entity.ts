@@ -10,8 +10,9 @@ import { Label } from './label.entity';
 import { User } from './user.entity';
 import { ReleaseArtist } from './releaseArtist.entity';
 import { AbstractEntity } from './abstract.entity';
+import { Track } from './track.entity';
 
-@Entity()
+@Entity('releases')
 @Unique([
   'title',
   'releaseDate',
@@ -76,4 +77,8 @@ export class Release extends AbstractEntity {
   // RELEASE ARTISTS
   @OneToMany(() => ReleaseArtist, (releaseArtist) => releaseArtist.release)
   artists: ReleaseArtist[];
+
+  // TRACKS
+  @OneToMany(() => Track, (track) => track.release)
+  tracks: Track[];
 }

@@ -90,7 +90,7 @@ export class ReleaseService {
             where: condition,
           });
 
-          return getPagingData({ data: releases, take, skip });
+          return getPagingData({ data: releases, size, page });
         } catch (error: any) {
           throw error;
         }

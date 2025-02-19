@@ -7,7 +7,7 @@ import { Release } from './release.entity';
 import { Artist } from './artist.entity';
 import { AbstractEntity } from './abstract.entity';
 
-@Entity()
+@Entity('release_artists')
 export class ReleaseArtist extends AbstractEntity {
 
   // RELEASE ID

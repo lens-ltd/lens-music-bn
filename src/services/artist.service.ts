@@ -59,7 +59,7 @@ export class ArtistService {
         relations: ['user'],
       });
 
-      return getPagingData({ data: artists, take, skip });
+      return getPagingData({ data: artists, size, page });
     } catch (error: any) {
       throw error;
     }

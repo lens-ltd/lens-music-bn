@@ -78,7 +78,7 @@ export class LabelService {
         take,
         skip,
       });
-      return getPagingData({ data: labels, take, skip });
+      return getPagingData({ data: labels, size, page });
     } catch (error: any) {
       throw error;
     }

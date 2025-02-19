@@ -20,7 +20,8 @@ app.use(errorHandler);
 
 AppDataSource.initialize()
   .then(() => {
-    console.log('Database connected');
+    const { DB_NAME } = process.env;
+    console.log(`Database connected to ${DB_NAME}`);
   })
   .catch((error) => {
     console.error('Database connection failed', error);

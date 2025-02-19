@@ -22,17 +22,17 @@ export const getPagination = ({
 
 export const getPagingData = ({
   data,
-  skip,
-  take,
+  size = 10,
+  page = 0,
 }: {
   data: any;
-  skip: number;
-  take: number;
+  size?: number;
+  page?: number;
 }) => {
   return {
     rows: data && data[0],
     totalCount: data && data[1],
-    totalPages: Math.ceil(data && Number(data[1]) / Number(take)),
-    currentPage: Number(skip) + 1,
+    totalPages: Math.ceil(data && Number(data[1]) / Number(size)),
+    currentPage: Number(page) + 1,
   };
 };

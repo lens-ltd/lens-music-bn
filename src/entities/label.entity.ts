@@ -8,16 +8,15 @@ import {
   Unique,
 } from 'typeorm';
 import { User } from './user.entity';
-import { countries } from '../constants/data.constant';
+import { countriesList } from '../constants/data.constant';
 import { Release } from './release.entity';
 import { AbstractEntity } from './abstract.entity';
 
-@Entity()
+@Entity('labels')
 @Unique(['id'])
 export class Label extends AbstractEntity {
   // NAME
   @Column({ name: 'name', length: 255, type: 'varchar', nullable: false })
-  @IsEmpty({ message: 'Name is required' })
   name: string;
 
   // EMAIL
@@ -36,7 +35,7 @@ export class Label extends AbstractEntity {
   @Column({
     name: 'country',
     type: 'enum',
-    enum: countries.map((country) => country.code),
+    enum: countriesList.map((country) => country.code),
     nullable: false,
     default: 'RW',
   })

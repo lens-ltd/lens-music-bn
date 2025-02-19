@@ -10,7 +10,7 @@ import { User } from './user.entity';
 import { ReleaseArtist } from './releaseArtist.entity';
 import { AbstractEntity } from './abstract.entity';
 
-@Entity()
+@Entity('artists')
 export class Artist extends AbstractEntity {
   // NAME
   @Column({ name: 'name', nullable: false })
